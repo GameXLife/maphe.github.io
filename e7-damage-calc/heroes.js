@@ -307,7 +307,7 @@ const heroes = {
     skills: {
       s1: {
         soulburn: true,
-        rate: (soulburn) => soulburn ? 1.8 : 1,
+        rate: (soulburn) => soulburn ? 2 : 1,
         pow: 0.95,
         flat: (soulburn) => elements.caster_max_hp.value() * (soulburn ? 0.2 : 0.12),
         flatTip: (soulburn) => ({ caster_max_hp: soulburn ? 20 : 12 }),
@@ -3607,11 +3607,11 @@ const heroes = {
         enhance: [0.01, 0.02, 0.02, 0.02, 0.03]
       },
       s3: {
-        soulburn: true,
-        rate: (soulburn) => soulburn ? 2.2 : 1.5,
+        rate: 1.1,
         pow: 1.05,
         enhance: [0.05, 0, 0.1, 0, 0.1],
         elemAdv: () => true,
+        penetrate: () => 0.5,
         single: true,
       }
     }
@@ -4415,7 +4415,6 @@ const heroes = {
       s2: {
         rate: 0.5, 
         pow: 1,
-        enhance: [0,0,0,0,0],
         aoe: true
       },
       s3: {
