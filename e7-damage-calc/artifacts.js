@@ -148,7 +148,7 @@ const artifacts = {
   kaladra: {
     id: 'kaladra',
     name: 'Kal\'adra',
-    scale: [0.15, 0.17, 0.18, 0.2, 0.21, 0.23, 0.24, 0.26, 0.27, 0.29, 0.3],
+    scale: [0.15, 0.17, 0.18, 0.2, 0.21, 0.23, 0.24, 0.26, 0.27, 0.28, 0.3],
     type: artifactDmgType.damage,
     exclusive: classType.mage
   },
@@ -159,6 +159,14 @@ const artifacts = {
     type: artifactDmgType.damage,
     exclusive: classType.mage,
     applies: (skill) => skill.aoe === true
+  },
+  merciless_glutton: {
+    id: 'merciless_glutton',
+    name: 'Merciless Glutton',
+    scale: [0.08, 0.088, 0.096, 0.104, 0.112, 0.12, 0.128, 0.136, 0.144, 0.152, 0.16],
+    type: artifactDmgType.damage,
+    exclusive: classType.warrior,
+    applies: (skill) => skill.single === true
   },
   portrait_of_the_saviors: {
     id: 'portrait_of_the_saviors',

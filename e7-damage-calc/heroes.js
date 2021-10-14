@@ -268,6 +268,20 @@ const heroes = {
       },
     }
   },
+  angel_of_light_angelica: {
+    name: 'Angel of Light Angelica',
+    element: element.light,
+    classType: classType.mage,
+    baseAtk: 957,
+    skills: {
+      s1: {
+        rate: 1,
+        pow: 1,
+        enhance: [0.1, 0, 0.1, 0, 0.1],
+        single: true,
+      }
+    }
+  },
   angelic_montmorancy: {
     name: 'Angelic Montmorancy',
     element: element.ice,
@@ -303,7 +317,7 @@ const heroes = {
     element: element.dark,
     classType: classType.warrior,
     baseAtk: 975,
-    form: [elements.caster_max_hp],
+    form: [elements.caster_max_hp, elements.dead_people],
     skills: {
       s1: {
         soulburn: true,
@@ -319,6 +333,8 @@ const heroes = {
         pow: 0.95,
         flat: () => elements.caster_max_hp.value() * 0.2,
         flatTip: () => ({ caster_max_hp: 20 }),
+        mult: () => 1 + Math.min(elements.dead_people.value(), 3)*0.25,
+        multTip: () => ({ dead_people: 25 }),
         enhance: [0.05, 0.05, 0, 0.05, 0.1, 0.1],
         single: true,
       }
@@ -718,6 +734,39 @@ const heroes = {
       }
     }
   },
+  belian: {
+    name: 'Belian',
+    element: element.light,
+    classType: classType.knight,
+    form: [elements.caster_max_hp],
+    baseAtk: 821,
+    skills: {
+      s1: {
+        rate: 0.6,
+        pow: 1.05,
+        flat: () => elements.caster_max_hp.value()*0.09,
+        flatTip: () => ({ caster_max_hp: 9 }),
+        enhance: [0.05, 0, 0.05, 0, 0.05, 0, 0.1],
+        aoe: true,
+      },
+      s1_extra: {
+        name: 'S1 Incursion',
+        rate: 0.6,
+        pow: 1.3,
+        flat: () => elements.caster_max_hp.value()*0.045,
+        flatTip: () => ({ caster_max_hp: 4.5 }),
+        enhance_from: 's1',
+        aoe: true,
+      },
+      s3: {
+        rate: 0.6,
+        pow: 1.3,
+        flat: () => elements.caster_max_hp.value()*0.12,
+        flatTip: () => ({ caster_max_hp: 12 }),
+        aoe: true,
+      }
+    }
+  },
   bellona: {
     name: 'Bellona',
     element: element.earth,
@@ -930,7 +979,7 @@ const heroes = {
         pow: 0.95,
         enhance: [0.05, 0.05, 0.05, 0, 0.05, 0.05, 0.1],
         mult: () => 1 + (100 - elements.target_hp_pc.value())*0.01,
-        multTip: () => ({ target_lost_hp_pc: 100 }),
+        multTip: () => ({ target_lost_hp_pc: 1 }),
         single: true,
       }
     }
@@ -1553,6 +1602,37 @@ const heroes = {
         mult: () => elements.caster_enrage.value() ? 1.3 : 1,
         multTip: () => ({ caster_rage: 30 }),
         exEq: () => elements.exclusive_equipment_3.value() ? 0.1 : 0,
+        enhance: [0.05, 0.05, 0, 0.1, 0.1],
+        aoe: true,
+      }
+    }
+  },
+   closer_charles: {
+    name:  'Closer Charles',
+    element: element.dark,
+    classType: classType.thief,
+    baseAtk: 1228,
+    form: [elements.target_hp_pc],
+     skills: {
+      s1: {
+        rate: 1,
+        pow: 1,
+        enhance: [0.05, 0.05, 0.05, 0.05, 0.1],
+        single: true,
+      },
+      s1_alt: {
+        rate: 1.2,
+        pow: 1,
+        name: 'S1 Demolition',
+        mult: () => 1 + (100-elements.target_hp_pc.value())*0.004,
+        multTip: () => ({ tagret_lost_hp_pc: 0.4 }),
+        enhance_from: 's1',
+        single: true,
+      },
+      s3: {
+        soulburn: true,
+        rate: (soulburn) => soulburn ? 1.25 : 1,
+        pow: 1,
         enhance: [0.05, 0.05, 0, 0.1, 0.1],
         aoe: true,
       }
@@ -2467,6 +2547,14 @@ const heroes = {
     classType: classType.warrior,
     baseAtk: 1426,
     dot: [dot.bleed],
+    innateAtkUp: () => {
+      let boost = 0.5;
+      for (let i = 0; i < Number(document.getElementById(`molagora-s2`).value); i++) {
+        boost += heroes.gunther.skills.s2.enhance[i];
+      }
+
+      return boost;
+    },
     skills: {
       s1: {
         noCrit: true,
@@ -2474,6 +2562,9 @@ const heroes = {
         pow: 0.85,
         enhance: [0.05, 0.05, 0.1, 0.1, 0.15],
         single: true,
+      },
+      s2: {
+        enhance: [0.05, 0.05, 0.05, 0.05, 0.05],
       },
       s3: {
         noCrit: true,
@@ -3598,7 +3689,8 @@ const heroes = {
     },
     skills: {
       s1: {
-        rate: () => elements.nb_hits.value()*0.7,
+        soulburn: true,
+        rate: (soulburn) => (soulburn ? 3 : elements.nb_hits.value())*0.7,
         pow: 0.95,
         enhance: [0.05, 0.05, 0.05, 0.1, 0.1],
         single: true,
@@ -3609,9 +3701,9 @@ const heroes = {
       s3: {
         rate: 1.1,
         pow: 1.05,
+        penetrate: () => 0.5,
         enhance: [0.05, 0, 0.1, 0, 0.1],
         elemAdv: () => true,
-        penetrate: () => 0.5,
         single: true,
       }
     }
@@ -3799,7 +3891,8 @@ const heroes = {
     element: element.fire,
     classType: classType.mage,
     baseAtk: 1187,
-    form: [elements.nb_targets, elements.target_hp_pc],
+    form: [elements.nb_targets, elements.target_hp_pc, elements.caster_immense_power],
+    atkUp: () => elements.caster_immense_power.value() ? 1.15 : 1,
     skills: {
       s1: {
         rate: 0.8,
@@ -3831,7 +3924,7 @@ const heroes = {
             case 1: return 1.9;
             case 2: return 1.6;
             case 3: return 1.3;
-            default: return 0;
+            default: return 1;
           }
         },
         multTip: () => ({ per_fewer_target: 30 }),
@@ -3839,11 +3932,12 @@ const heroes = {
         aoe: true,
       },
       s3: {
-        rate: 1.2,
-        pow: 0.8,
+        rate: 1.15,
+        pow: 0.95,
+        critDmgBoost: () => 0.2,
         mult: () => 1 + (100-elements.target_hp_pc.value())*0.003,
         multTip: () => ({ caster_lost_hp_pc: 0.3 }),
-        enhance: [0.1, 0.1, 0, 0.15, 0.15],
+        enhance: [0.05, 0.05, 0, 0.1, 0.15],
         aoe: true,
       }
     }
@@ -4316,13 +4410,12 @@ const heroes = {
     element: element.earth,
     classType: classType.mage,
     baseAtk: 1556,
+    innateAtkUp: () => 0.3,
     skills: {
       s1: {
         rate: 1,
         pow: 1,
         enhance: [0.05, 0, 0.1, 0, 0.15],
-        soulburn: true,
-        aoe: true
       },
       s3: {
         rate: 1.8, 
@@ -4785,6 +4878,7 @@ const heroes = {
     element: element.earth,
     classType: classType.knight,
     baseAtk: 1445,
+    innateAtkUp: () => 0.3,
     skills: {
       s1: {
         rate: 0.95,
@@ -5214,6 +5308,43 @@ const heroes = {
         penetrateTip: () => ({ caster_target_atk_diff: 0.03 }),
         enhance: [0.05, 0.05, 0, 0.1, 0.1],
         aoe: true,
+      },
+    }
+  },
+  summertime_iseria: {
+    name: 'Summertime Iseria',
+    element: element.fire,
+    classType: classType.ranger,
+    baseAtk: 1203,
+    form: [elements.target_bomb_detonate],
+    dot: [dot.bomb],
+    innateAtkUp: () => {
+      let boost = 0.35;
+      for (let i = 0; i < Number(document.getElementById(`molagora-s2`).value); i++) {
+        boost += heroes.summertime_iseria.skills.s2.enhance[i];
+      }
+
+      return boost;
+    },
+    skills: {
+      s1: {
+        rate: 1,
+        pow: 1,
+        enhance: [0.05, 0, 0.1, 0, 0.15],
+        single: true,
+        noCrit: true,
+      },
+      s2: {
+        enhance: [0.02, 0.02, 0.03, 0.03, 0.05],
+      },
+      s3: {
+        rate: 1.2,
+        pow: 1,
+        detonate: dot.bomb,
+        detonation: () => 1.1,
+        enhance: [0.05, 0.05, 0, 0.1, 0.1],
+        aoe: true,
+        noCrit: true,
       },
     }
   },
