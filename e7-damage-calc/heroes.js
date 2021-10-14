@@ -4405,6 +4405,29 @@ const heroes = {
       }
     }
   },
+  ran:{
+    name: 'Ran',
+    element: element.ice,
+    classType: classType.thief,
+    baseAtk: 1119,
+    form: [elements.caster_speed, elements.target_speed],
+    skills: {
+      s1: {
+        rate: 1,
+        pow: 1,
+        enhance: [0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.1],
+        penetrate: () => 0.2
+      },
+      s3: {
+        rate: 1, 
+        pow: 0.9,
+        mult: () => 1 + elements.caster_speed.value()*0.001 + elements.target_speed.value()*0.003,
+        multTip: () => ({ caster_speed: 0.1, target_speed: 0.3 }),
+        enhance: [0.05, 0.05, 0, 0, 0, 0.1, 0.1],
+        aoe: true
+      }
+    }
+  },
   ram:{
     name: 'Ram',
     element: element.earth,
